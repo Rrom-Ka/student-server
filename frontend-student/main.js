@@ -102,12 +102,31 @@ container.classList.add('container');
 sheetTitle.classList.add('text-center');
 listStudentsHead.classList.add('m-0');
 listStudents.classList.add('m-0');
-itemHeadStudents.classList.add('list-group', 'list-group-horizontal', 'd-flex', 'justify-content-between', 'w-100');
-stringHeadStudentsFIO.classList.add('list-group-item', 'w-25');
-stringHeadStudentsFaculty.classList.add('list-group-item', 'w-25');
-stringHeadStudentsBithday.classList.add('list-group-item', 'w-25');
-stringHeadStudentStady.classList.add('list-group-item', 'w-25');
+itemHeadStudents.classList.add('list-group', 'list-group-horizontal', 'd-flex', 'justify-content-start', 'w-100');
+stringHeadStudentsFIO.classList.add('list-group-item');
+stringHeadStudentsFaculty.classList.add('list-group-item');
+stringHeadStudentsBithday.classList.add('list-group-item');
+stringHeadStudentStady.classList.add('list-group-item');
+stringHeadStudentsFIO.style.width='30%'
+stringHeadStudentsFaculty.style.width='17%'
+stringHeadStudentsBithday.style.width='27%'
+stringHeadStudentStady.style.width='20%'
 
+let wrapHeadStudentsButton=document.createElement('div');
+    let headDeleteStidentButton=document.createElement('div');
+    let headChangeStidentButton=document.createElement('div');
+    wrapHeadStudentsButton.classList.add('d-flex', 'py-2');
+    // headChangeStidentButton.type='button';
+    // headDeleteStidentButton.type='button';
+    headChangeStidentButton.classList.add('btn', 'btn-primary', 'btn-sm');
+    headDeleteStidentButton.classList.add('btn', 'btn-danger', 'btn-sm');
+    headChangeStidentButton.style.maxHeight='35px'
+    // headChangeStidentButton.style.paddingBottom='10px'
+     headDeleteStidentButton.style.maxHeight='35px'
+    // headDeleteStidentButton.style.paddingBottom='10px'
+    headChangeStidentButton.textContent='↔';
+    headDeleteStidentButton.textContent='X';
+    wrapHeadStudentsButton.append(headChangeStidentButton, headDeleteStidentButton)
 //Форма ввода студентов
 
 function createEnterStudentForm(){
@@ -326,10 +345,11 @@ let closeFormStudentButton = createEnterStudentForm().closeFormStudentButton;
 getFormFilter();
 formContainer.append(enterForm);
 callEnterFormStudentWrap.append(callEnterFormStudentTitle, callEnterFormStudentButton);
-itemHeadStudents.append(stringHeadStudentsFIO, stringHeadStudentsFaculty, stringHeadStudentsBithday, stringHeadStudentStady);
+itemHeadStudents.append(stringHeadStudentsFIO, stringHeadStudentsFaculty, stringHeadStudentsBithday, stringHeadStudentStady, wrapHeadStudentsButton);
 listStudentsHead.append(itemHeadStudents);
 listContainer.append(listStudentsHead,  listStudents);
 container.append(sheetTitle,callEnterFormStudentWrap, formContainer,  filtrContainer, listContainer);
+
 // Этап 3. Создайте функцию вывода одного студента в таблицу, по аналогии с тем, как вы делали вывод одного дела в модуле 8. Функция должна вернуть html элемент с информацией и пользователе.У функции должен быть один аргумент - объект студента.
 function getStudentItem(studentObj=studentsList[0]) {
     let nameStudentObg=studentObj.name;
@@ -358,12 +378,34 @@ function getStudentItem(studentObj=studentsList[0]) {
     stringSingleStudentStady.textContent=courseStudy;
     // добавляем классы
     itemSinglStudents.classList.add('list-group', 'list-group-horizontal', 'd-flex', 'justify-content-between');
-    stringSingleStudentsFIO.classList.add('list-group-item', 'w-25');
-    stringSingleStudentsFaculty.classList.add('list-group-item', 'w-25');
-    stringSingleStudentsBithday.classList.add('list-group-item', 'w-25');
-    stringSingleStudentStady.classList.add('list-group-item', 'w-25');
+    stringSingleStudentsFIO.classList.add('list-group-item');
+    stringSingleStudentsFaculty.classList.add('list-group-item');
+    stringSingleStudentsBithday.classList.add('list-group-item');
+    stringSingleStudentStady.classList.add('list-group-item');
+
+    stringSingleStudentsFIO.style.width='30%';
+    stringSingleStudentsFaculty.style.width='17%';
+    stringSingleStudentsBithday.style.width='27%';
+    stringSingleStudentStady.style.width='20%';
+
+    //кнопки удалеиня и изменения строки
+    let wrapStidentButton=document.createElement('div');
+    let deleteStidentButton=document.createElement('button');
+    let changeStidentButton=document.createElement('button');
+    wrapStidentButton.classList.add('d-flex', 'py-2');
+    changeStidentButton.type='button';
+    deleteStidentButton.type='button';
+    changeStidentButton.classList.add('btn', 'btn-primary', 'btn-sm');
+    deleteStidentButton.classList.add('btn', 'btn-danger', 'btn-sm');
+    changeStidentButton.style.maxHeight='35px'
+    // changeStidentButton.style.paddingBottom='10px'
+     deleteStidentButton.style.maxHeight='35px'
+    // deleteStidentButton.style.paddingBottom='10px'
+    changeStidentButton.textContent='↔';
+    deleteStidentButton.textContent='X';
     //вкалдваем спаны в айтем и затем в лист
-    itemSinglStudents.append(stringSingleStudentsFIO, stringSingleStudentsFaculty, stringSingleStudentsBithday, stringSingleStudentStady);
+    wrapStidentButton.append(changeStidentButton, deleteStidentButton)
+    itemSinglStudents.append(stringSingleStudentsFIO, stringSingleStudentsFaculty, stringSingleStudentsBithday, stringSingleStudentStady, wrapStidentButton);
     listStudents.append(itemSinglStudents);
 }
 
@@ -407,7 +449,7 @@ function calculate_course(startStady){
     let finalStady=startStady+4;
     let intervalStadyStudent = String(startStady) + '-' + String(finalStady);
     if (finalStady<new Date().getFullYear()+1 || finalStady<new Date().getFullYear()&& (new Date().getMonth()+1)>=9){
-        course=intervalStadyStudent+' (Окончил)';
+        course=intervalStadyStudent+' (Конец)';
     } else if (startStady>=new Date().getFullYear()) {
         course='Не поступал';
     } else {

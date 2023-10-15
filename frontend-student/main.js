@@ -5,41 +5,41 @@ const studentsList = [
     {
         name: 'Василий',
         surname: 'Васильев',
-        midlename: 'Васильевич',
-        date: '1974-12-20',
-        dateStartStudy: 2024,
+        lastname: 'Васильевич',
+        birthday: '1974-12-20',
+        studyStart: '2024',
         faculty: 'Автомобили',
     },
     {
         name: 'Евгений',
         surname: 'Евгеньев',
-        midlename: 'Евгеньевич',
-        date: '1980-10-25',
-        dateStartStudy: 2000,
+        lastname: 'Евгеньевич',
+        birthday: '1980-10-25',
+        studyStart: '2000',
         faculty: 'Мотоциклы',
     },
     {
         name: 'Иван',
         surname: 'Иванов',
-        midlename: 'Иванович',
-        date: '1999-5-10',
-        dateStartStudy: 2015,
+        lastname: 'Иванович',
+        birthday: '1999-5-10',
+        studyStart: '2015',
         faculty: 'Философии',
     },
     {
         name: 'Сергей',
         surname: 'Сергеев',
-        midlename: 'Сергеевич',
-        date: '1995-7-1',
-        dateStartStudy: 2020,
+        lastname: 'Сергеевич',
+        birthday: '1995-7-1',
+        studyStart: '2020',
         faculty: 'Автомобили',
     },
     {
         name: 'Александр',
         surname: 'Александров',
-        midlename: 'Александрович',
-        date: '1998-9-12',
-        dateStartStudy: 2022,
+        lastname: 'Александрович',
+        birthday: '1998-9-12',
+        studyStart: '2022',
         faculty: 'Мотоциклы',
     },
 ];
@@ -237,7 +237,7 @@ function createEnterStudentForm(){
     });
 
     //событие ввода студента
-    enterStudentForm.addEventListener('submit', function(e){
+    enterStudentForm.addEventListener('submit', async function(e){
         e.preventDefault();
         let inputStudentNameValue = inputStudentName.value;
         let inputStudentSurnameValue=inputStudentSurname.value;
@@ -256,16 +256,19 @@ function createEnterStudentForm(){
        let objNewStudent=[{
            name: inputStudentNameValue,
            surname: inputStudentSurnameValue,
-           midlename: inputStudentMidlenameValue,
-           date: inputStudentDateValue,
-           dateStartStudy: inputStudentDateStartStudyValue,
+           lastname: inputStudentMidlenameValue,
+           birthday: inputStudentDateValue,
+           studyStart: inputStudentDateStartStudyValue,
            faculty: inputStudentFacultyValue,
         }];
 
         if(indexStudentName+indexStudentSurname+indexStudentMidlename+indexStudentFaculty+indexStudentDate+indexStudentDateStartStudy==6){
-            let listArray=getItemlocalDataArrStudent();
+            let listArray= await getItemlocalDataArrStudent();
+            console.log('267', listArray)
             listArray.push(objNewStudent[0]);
-        saveList(listArray);
+            console.log('269', listArray[listArray.length-1])
+        saveList(objNewStudent);
+        // saveList([listArray[listArray.length-1]]);
         filterStudentsList=listArray;
         renderStudentsTable();
          inputStudentName.value='';
@@ -331,9 +334,9 @@ container.append(sheetTitle,callEnterFormStudentWrap, formContainer,  filtrConta
 function getStudentItem(studentObj=studentsList[0]) {
     let nameStudentObg=studentObj.name;
     let surnameStdentObj=studentObj.surname;
-    let midlenameStudentObj=studentObj.midlename;
-    let dateStudentObj=studentObj.date;
-    let dateStartStudyStudentObj=studentObj.dateStartStudy;
+    let midlenameStudentObj=studentObj.lastname;
+    let dateStudentObj=studentObj.birthday;
+    let dateStartStudyStudentObj=studentObj.studyStart;
     // ФИО
     let fioStudentObj=surnameStdentObj + ' '+ nameStudentObg+' '+midlenameStudentObj;
     //Факультет
@@ -341,14 +344,14 @@ function getStudentItem(studentObj=studentsList[0]) {
     // дата рождения и возраст
     let dateBirthdayAndOld=calculate_age(new Date(dateStudentObj));
     //дата поступления и курс
-    let courseStudy =calculate_course(dateStartStudyStudentObj);
+    let courseStudy =calculate_course(Number(dateStartStudyStudentObj));
     //заголовок таблицы
     let itemSinglStudents=document.createElement('li');
     let stringSingleStudentsFIO=document.createElement('span');
     let stringSingleStudentsFaculty=document.createElement('span');
     let stringSingleStudentsBithday=document.createElement('span');
     let stringSingleStudentStady=document.createElement('span');
-    //присваиваем в текст 
+    //присваиваем в текст
     stringSingleStudentsFIO.textContent=fioStudentObj;
     stringSingleStudentsFaculty.textContent=facultyStudentObj;
     stringSingleStudentsBithday.textContent=dateBirthdayAndOld;
@@ -475,8 +478,29 @@ function checkInputTextEnterForm(input, label){
 
 
 //функция сохранения списка в хранилище
-function saveList(arr, keyName='Students'){
-    localStorage.setItem(keyName, JSON.stringify(arr));
+async function saveList(arr, keyName='Students'){
+  console.log(arr)
+  for (let obj of arr) {
+    // console.log(obj)
+   const response = await fetch('http://localhost:3000/api/students', {
+                    method: 'POST',
+                    body: JSON.stringify(obj),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+              }
+              const resp = await fetch('http://localhost:3000/api/students');
+              const serverData = await resp.json();
+              console.log(serverData)
+
+
+    //localStorage.setItem(keyName, JSON.stringify(arr));
+    // //server получаем тело ответа
+    // const todoItem=await response.json();
+    // console.log(todoItem)
+
 }
 
 
@@ -517,7 +541,7 @@ function getAndSetSortUsers(prop, propTwo, propThree){
 //ФИО
 
 stringHeadStudentsFIO.addEventListener('click', function(){
-    getAndSetSortUsers('surname', 'name', 'midlename');
+    getAndSetSortUsers('surname', 'name', 'lastname');
         addSimbolSortInHeadTable(stringHeadStudentsFIO, 'Ф.И.О.');
         // renderStudentsTable();
     });
@@ -530,12 +554,12 @@ stringHeadStudentsFaculty.addEventListener('click', function(){
 });
 //дата рождения
 stringHeadStudentsBithday.addEventListener('click', function(){
-    getAndSetSortUsers('date');
+    getAndSetSortUsers('birthday');
     addSimbolSortInHeadTable(stringHeadStudentsBithday, 'Дата рождения и возраст');
  });
 //год поступления
 stringHeadStudentStady.addEventListener('click', function(){
-    getAndSetSortUsers('dateStartStudy');
+    getAndSetSortUsers('studyStart');
     addSimbolSortInHeadTable(stringHeadStudentStady, 'Годы обучения');
     // renderStudentsTable()
 });
@@ -602,13 +626,13 @@ function filter(arr, prop, value) {
                 if (String(item[prop]).includes(value)==true) {
                     result.push(item);
                 }
-            }else if(prop=='dateStartStudy'){
+            }else if(prop=='studyStart'){
                 if (String(item[prop])==value) {
                     result.push(item);
                 }
             }
-            else {//проверить руботу item.name и midlename вместо item['name'] g
-                    if (String(item[prop]).includes(value)==true || String(item['name']).includes(value)==true || String(item['midlename']).includes(value)==true ) {
+            else {//проверить руботу item.name и lastname вместо item['name'] g
+                    if (String(item[prop]).includes(value)==true || String(item['name']).includes(value)==true || String(item['lastname']).includes(value)==true ) {
                         result.push(item);
                     }
                 }
@@ -624,8 +648,8 @@ function render(){
           let newArr=[...arr];
           if (inputFilterFIO.value!=='') filterStudentsList  = filter(filterStudentsList, 'surname', inputFilterFIO.value);
           if (inputFilterFaculty.value!=='') filterStudentsList  = filter(filterStudentsList, 'faculty', inputFilterFaculty.value);
-          if (inputFilterStartData.value!=='') filterStudentsList  = filter(filterStudentsList, 'dateStartStudy', inputFilterStartData.value);
-          if (inputFilterFinishdata.value!=='') filterStudentsList  = filter(filterStudentsList, 'dateStartStudy', String(Number(inputFilterFinishdata.value)-4));
+          if (inputFilterStartData.value!=='') filterStudentsList  = filter(filterStudentsList, 'studyStart', inputFilterStartData.value);
+          if (inputFilterFinishdata.value!=='') filterStudentsList  = filter(filterStudentsList, 'studyStart', String(Number(inputFilterFinishdata.value)-4));
           renderStudentsTable();
           return newArr;
 }
@@ -672,15 +696,23 @@ buttonFilterCancel.addEventListener('click', function(){
 });
 
 //функция получения даннх из хранилища
-function getItemlocalDataArrStudent(){
-    let localList =localStorage.getItem('Students');
-    if (localList==null || localList==''){
-        saveList(studentsList);
-        localList =localStorage.getItem('Students');
+async function getItemlocalDataArrStudent(){
+    // const serverData =localStorage.getItem('Students');
+    let response = await fetch('http://localhost:3000/api/students');
+    let serverData = await response.json();
+    console.log(serverData)
+
+    if (serverData==null || serverData==''){
+       await saveList(studentsList);
+        //serverData =localStorage.getItem('Students');
+        response = await fetch('http://localhost:3000/api/students');
+        serverData = await response.json();
     }
-    filterStudentsList=JSON.parse(localList);
+    filterStudentsList=serverData;
+    // console.log(filterStudentsList)
     renderStudentsTable();
-            return JSON.parse(localList);
+    console.log(serverData)
+            return serverData;
 }
 
-getItemlocalDataArrStudent();
+ getItemlocalDataArrStudent();

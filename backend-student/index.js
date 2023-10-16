@@ -129,7 +129,7 @@ function getStudent(itemId) {
 /**
  * Изменяет студента с указанным ID и сохраняет изменения в базу данных
  * @param {string} itemId - ID изменяемого студента
- * @param {{ name?: string, surname?: string, lastname?: string, birthday?: string, studyStart?: string, faculty?: string }} data - Объект с изменяемыми данными
+ * @param {{ name: string, surname: string, lastname: string, birthday: string, studyStart: string, faculty: string }} data - Объект с изменяемыми данными
  * @throws {ApiError} Студент с таким ID не найден (statusCode 404)
  * @throws {ApiError} Некорректные данные в аргументе (statusCode 422)
  * @returns {{ id: string, name: string, surname: string, lastname: string, birthday: string, studyStart: string, faculty: string, createdAt: string, updatedAt: string }} Объект студента

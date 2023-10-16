@@ -46,7 +46,7 @@ const studentsList = [
 
 //Отфмльтрованный массив
 let filterStudentsList=[];
-
+let idChngeStudent=-1;
 
 // Этап 1. В HTML файле создайте верстку элементов, которые будут статичны(неизменны).
 const container = document.getElementById('student-sheet');
@@ -73,6 +73,8 @@ callEnterFormStudentButton.classList.add('btn', 'btn-primary');
 callEnterFormStudentButton.type='button';
 //Форма ввода
 const formContainer=document.createElement('div');
+    let enterStudentForm=document.createElement('form');
+
 //Список студентов и его заголовок
 const listContainer=document.createElement('div');
 const listStudentsHead=document.createElement('ul');
@@ -102,7 +104,7 @@ container.classList.add('container');
 sheetTitle.classList.add('text-center');
 listStudentsHead.classList.add('m-0');
 listStudents.classList.add('m-0');
-itemHeadStudents.classList.add('list-group', 'list-group-horizontal', 'd-flex', 'justify-content-start', 'w-100');
+itemHeadStudents.classList.add('list-group', 'list-group-horizontal', 'd-flex', 'justify-content-between', 'w-100');
 stringHeadStudentsFIO.classList.add('list-group-item');
 stringHeadStudentsFaculty.classList.add('list-group-item');
 stringHeadStudentsBithday.classList.add('list-group-item');
@@ -130,7 +132,7 @@ let wrapHeadStudentsButton=document.createElement('div');
 //Форма ввода студентов
 
 function createEnterStudentForm(){
-    let enterStudentForm=document.createElement('form');
+    //let enterStudentForm=document.createElement('form');
     let enterStudentFieldset=document.createElement('fieldset');
     let enterStudentLegend=document.createElement('legend');
     let enterStudentFormWraper=document.createElement('div');
@@ -158,6 +160,7 @@ function createEnterStudentForm(){
     let crosscloseFormStudentSpan=document.createElement('span');
     let enterSudentButton=document.createElement('button');
     let cancelSudentButton=document.createElement('button');
+    // let changeSudentButton=document.createElement('button');
 
     enterStudentForm.classList.add( 'mb-3', 'w-100', 'position-relative', 'd-none');
     enterStudentFormWraper.classList.add('form-row');
@@ -174,6 +177,7 @@ function createEnterStudentForm(){
     labelStudentName.textContent='Имя';
     inputStudentName.type='text';
     inputStudentName.setAttribute('id', 'idInputStudentName');
+    inputStudentName.setAttribute('name', 'nameInputStudentName');
     labelStudentName.setAttribute('for', 'idInputStudentName');
 
     inputStudentSurname.classList.add('form-control');
@@ -183,6 +187,7 @@ function createEnterStudentForm(){
     labelStudentSurname.textContent='Фамилия';
     inputStudentSurname.type='text';
     inputStudentSurname.setAttribute('id', 'idInputStudentSurname');
+    inputStudentSurname.setAttribute('name', 'nameInputStudentSurname');
     labelStudentSurname.setAttribute('for', 'idInputStudentSurname');
 
     inputStudentMidlename.classList.add('form-control');
@@ -192,6 +197,7 @@ function createEnterStudentForm(){
     labelStudentMidlename.textContent='Отчество';
     inputStudentMidlename.type='text';
     inputStudentMidlename.setAttribute('id', 'idInputStudentMidlename');
+    inputStudentMidlename.setAttribute('name', 'nameInputStudentMidlename');
     labelStudentMidlename.setAttribute('for', 'idInputStudentMidlename');
 
     inputStudentDate.classList.add('form-control');
@@ -201,6 +207,7 @@ function createEnterStudentForm(){
     labelStudentDate.textContent='Дата Рождения';
     inputStudentDate.type='date';
     inputStudentDate.setAttribute('id', 'idInputStudentDate');
+    inputStudentDate.setAttribute('name', 'nameInputStudentDate');
     labelStudentDate.setAttribute('for', 'idInputStudentDate');
 
     inputStudentDateStartStudy.classList.add('form-control');
@@ -210,6 +217,7 @@ function createEnterStudentForm(){
     labelStudentDateStartStudy.textContent='Дата поступления';
     inputStudentDateStartStudy.type='text';
     inputStudentDateStartStudy.setAttribute('id', 'idInputStudentDateStartStudy');
+    inputStudentDateStartStudy.setAttribute('name', 'nameInputStudentDateStartStudy');
     labelStudentDateStartStudy.setAttribute('for', 'idInputStudentDateStartStudy');
 
     inputStudentFaculty.classList.add('form-control');
@@ -219,6 +227,7 @@ function createEnterStudentForm(){
     labelStudentFaculty.textContent='Факультет';
     inputStudentFaculty.type='text';
     inputStudentFaculty.setAttribute('id', 'idInputStudentFaculty');
+    inputStudentFaculty.setAttribute('name', 'nameInputStudentFaculty');
     labelStudentFaculty.setAttribute('for', 'idInputStudentFaculty');
 
     let spanLabelError=document.createElement('span');
@@ -228,6 +237,8 @@ function createEnterStudentForm(){
     closeFormStudentButton.type='button';
     enterSudentButton.type='submit';
     cancelSudentButton.type='button';
+    // changeSudentButton.type='button';
+
     closeFormStudentButton.classList.add('ml-2', 'mb-1', 'close', 'position-absolute');
     closeFormStudentButton.style.top=0;
     closeFormStudentButton.style.right=0;
@@ -237,8 +248,10 @@ function createEnterStudentForm(){
     crosscloseFormStudentSpan.setAttribute('aria-hidden','true');
     enterSudentButton.classList.add('btn', 'btn-primary');
     cancelSudentButton.classList.add('btn', 'btn-danger');
+    // changeSudentButton.classList.add('btn', 'btn-dark');
     enterSudentButton.textContent='Ввод';
     cancelSudentButton.textContent='Сброс';
+    // changeSudentButton.textContent='Изменить';
 
     //блокируем кнопку ввода
     enterSudentButton.disabled = false;
@@ -282,13 +295,14 @@ function createEnterStudentForm(){
         }];
 
         if(indexStudentName+indexStudentSurname+indexStudentMidlename+indexStudentFaculty+indexStudentDate+indexStudentDateStartStudy==6){
+          saveList(objNewStudent);
             let listArray= await getItemlocalDataArrStudent();
             console.log('267', listArray)
-            listArray.push(objNewStudent[0]);
+            // listArray.push(objNewStudent[0]);
             console.log('269', listArray[listArray.length-1])
-        saveList(objNewStudent);
         // saveList([listArray[listArray.length-1]]);
         filterStudentsList=listArray;
+        console.log('305', filterStudentsList )
         renderStudentsTable();
          inputStudentName.value='';
          inputStudentSurname.value='';
@@ -300,6 +314,17 @@ function createEnterStudentForm(){
             return;
         }
     });
+    // changeSudentButton.addEventListener('click', async function(){
+    // //   let objNewStudent=[{
+    // //     name: inputStudentNameValue,
+    // //     surname: inputStudentSurnameValue,
+    // //     lastname: inputStudentMidlenameValue,
+    // //     birthday: inputStudentDateValue,
+    // //     studyStart: inputStudentDateStartStudyValue,
+    // //     faculty: inputStudentFacultyValue,
+    // //  }];
+    // })
+
     //событие очистки полей формы ввода студента
     cancelSudentButton.addEventListener('click', function(){
         inputStudentName.value='';
@@ -340,10 +365,10 @@ function createEnterStudentForm(){
     };
 }
 
-let enterForm = createEnterStudentForm().enterStudentForm;
+//let enterForm = createEnterStudentForm().enterStudentForm;
 let closeFormStudentButton = createEnterStudentForm().closeFormStudentButton;
 getFormFilter();
-formContainer.append(enterForm);
+formContainer.append(enterStudentForm);
 callEnterFormStudentWrap.append(callEnterFormStudentTitle, callEnterFormStudentButton);
 itemHeadStudents.append(stringHeadStudentsFIO, stringHeadStudentsFaculty, stringHeadStudentsBithday, stringHeadStudentStady, wrapHeadStudentsButton);
 listStudentsHead.append(itemHeadStudents);
@@ -389,23 +414,58 @@ function getStudentItem(studentObj=studentsList[0]) {
     stringSingleStudentStady.style.width='20%';
 
     //кнопки удалеиня и изменения строки
-    let wrapStidentButton=document.createElement('div');
-    let deleteStidentButton=document.createElement('button');
-    let changeStidentButton=document.createElement('button');
-    wrapStidentButton.classList.add('d-flex', 'py-2');
-    changeStidentButton.type='button';
-    deleteStidentButton.type='button';
-    changeStidentButton.classList.add('btn', 'btn-primary', 'btn-sm');
-    deleteStidentButton.classList.add('btn', 'btn-danger', 'btn-sm');
-    changeStidentButton.style.maxHeight='35px'
-    // changeStidentButton.style.paddingBottom='10px'
-     deleteStidentButton.style.maxHeight='35px'
-    // deleteStidentButton.style.paddingBottom='10px'
-    changeStidentButton.textContent='↔';
-    deleteStidentButton.textContent='X';
+    let wrapStidentButtonList=document.createElement('div');
+    let deleteStidentButtonList=document.createElement('button');
+    let changeStidentButtonList=document.createElement('button');
+    wrapStidentButtonList.classList.add('d-flex', 'py-2');
+    changeStidentButtonList.type='button';
+    deleteStidentButtonList.type='button';
+    changeStidentButtonList.classList.add('btn', 'btn-primary', 'btn-sm');
+    deleteStidentButtonList.classList.add('btn', 'btn-danger', 'btn-sm');
+    changeStidentButtonList.style.maxHeight='35px'
+    // changeStidentButtonList.style.paddingBottom='10px'
+     deleteStidentButtonList.style.maxHeight='35px'
+    // deleteStidentButtonList.style.paddingBottom='10px'
+    changeStidentButtonList.textContent='↔';
+    deleteStidentButtonList.textContent='X';
+    //собтия кнопок
+    //Удаление
+    deleteStidentButtonList.addEventListener('click', function(){
+      if (confirm('Вы уверены')){
+        itemSinglStudents.remove();
+        fetch(`http://localhost:3000/api/students/${studentObj.id}`, {
+            method: 'DELETE',
+        })
+      }
+    })
+
+  //изменение ------------------------------
+
+    changeStidentButtonList.addEventListener('click', function(){
+      console.log('bpvtybnm', enterStudentForm.nameInputStudentFaculty.value)
+      console.log('studentObj.id', studentObj.id)
+      idChngeStudent=studentObj.id
+      // let inputStudentName = createEnterStudentForm().inputStudentName;
+      enterStudentForm.nameInputStudentSurname.value=studentObj.surname
+      enterStudentForm.nameInputStudentName.value=studentObj.name
+      enterStudentForm.nameInputStudentMidlename.value=studentObj.midlename
+      enterStudentForm.nameInputStudentDate.value=studentObj.birthday
+      enterStudentForm.nameInputStudentDateStartStudy.value=studentObj.studyStart
+      enterStudentForm.nameInputStudentFaculty.value=studentObj.faculty
+      // console.log(inputStudentName.value)
+      enterStudentForm.classList.remove('d-none');
+      callEnterFormStudentWrap.classList.add('invisible');
+      // if (confirm('Вы уверены')){
+      //   itemSinglStudents.remove();
+      //   fetch(`http://localhost:3000/api/students/${studentObj.id}`, {
+      //       method: 'DELETE',
+      //   })
+      // }
+    })
+
     //вкалдваем спаны в айтем и затем в лист
-    wrapStidentButton.append(changeStidentButton, deleteStidentButton)
-    itemSinglStudents.append(stringSingleStudentsFIO, stringSingleStudentsFaculty, stringSingleStudentsBithday, stringSingleStudentStady, wrapStidentButton);
+    wrapStidentButtonList.append(changeStidentButtonList, deleteStidentButtonList)
+    itemSinglStudents.append(stringSingleStudentsFIO, stringSingleStudentsFaculty, stringSingleStudentsBithday, stringSingleStudentStady, wrapStidentButtonList);
     listStudents.append(itemSinglStudents);
 }
 
@@ -520,24 +580,36 @@ function checkInputTextEnterForm(input, label){
 
 
 //функция сохранения списка в хранилище
-async function saveList(arr, keyName='Students'){
+async function saveList(arr){
   console.log(arr)
-  for (let obj of arr) {
-    // console.log(obj)
-   const response = await fetch('http://localhost:3000/api/students', {
-                    method: 'POST',
-                    body: JSON.stringify(obj),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
+  if (idChngeStudent==-1){
 
-              }
+     console.log('savelist-581', idChngeStudent)
+    for (let obj of arr) {
+     const response = await fetch('http://localhost:3000/api/students', {
+                      method: 'POST',
+                      body: JSON.stringify(obj),
+                      headers: {
+                          'Content-Type': 'application/json',
+                      }
+                  });
+
+                }
+  } else {
+    console.log('savelist-581', idChngeStudent)
+
+    const response = await fetch(`http://localhost:3000/api/students/${idChngeStudent}`, {
+                      method: 'PATCH',
+                      body: JSON.stringify(arr[0]),
+                      headers: {
+                          'Content-Type': 'application/json',
+                      }
+                  });
+                  idChngeStudent=-1;
+  }
               const resp = await fetch('http://localhost:3000/api/students');
               const serverData = await resp.json();
               console.log(serverData)
-
-
     //localStorage.setItem(keyName, JSON.stringify(arr));
     // //server получаем тело ответа
     // const todoItem=await response.json();

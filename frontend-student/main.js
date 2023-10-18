@@ -109,10 +109,10 @@ stringHeadStudentsFIO.classList.add('list-group-item');
 stringHeadStudentsFaculty.classList.add('list-group-item');
 stringHeadStudentsBithday.classList.add('list-group-item');
 stringHeadStudentStady.classList.add('list-group-item');
-stringHeadStudentsFIO.style.width = '30%'
-stringHeadStudentsFaculty.style.width = '17%'
-stringHeadStudentsBithday.style.width = '27%'
-stringHeadStudentStady.style.width = '20%'
+stringHeadStudentsFIO.style.width = '30%';
+stringHeadStudentsFaculty.style.width = '17%';
+stringHeadStudentsBithday.style.width = '27%';
+stringHeadStudentStady.style.width = '20%';
 
 let wrapHeadStudentsButton = document.createElement('div');
 let headDeleteStidentButton = document.createElement('div');
@@ -120,11 +120,11 @@ let headChangeStidentButton = document.createElement('div');
 wrapHeadStudentsButton.classList.add('d-flex', 'py-2');
 headChangeStidentButton.classList.add('btn', 'btn-primary', 'btn-sm');
 headDeleteStidentButton.classList.add('btn', 'btn-danger', 'btn-sm');
-headChangeStidentButton.style.maxHeight = '35px'
-headDeleteStidentButton.style.maxHeight = '35px'
+headChangeStidentButton.style.maxHeight = '35px';
+headDeleteStidentButton.style.maxHeight = '35px';
 headChangeStidentButton.textContent = '↔';
 headDeleteStidentButton.textContent = 'X';
-wrapHeadStudentsButton.append(headChangeStidentButton, headDeleteStidentButton)
+wrapHeadStudentsButton.append(headChangeStidentButton, headDeleteStidentButton);
 //Форма ввода студентов
 
 function createEnterStudentForm() {
@@ -341,7 +341,7 @@ function createEnterStudentForm() {
   };
 }
 
-let closeFormStudentButton = createEnterStudentForm().closeFormStudentButton;
+createEnterStudentForm().closeFormStudentButton;
 getFormFilter();
 formContainer.append(enterStudentForm);
 callEnterFormStudentWrap.append(callEnterFormStudentTitle, callEnterFormStudentButton);
@@ -397,8 +397,8 @@ function getStudentItem(studentObj = studentsList[0]) {
   deleteStidentButtonList.type = 'button';
   changeStidentButtonList.classList.add('btn', 'btn-primary', 'btn-sm');
   deleteStidentButtonList.classList.add('btn', 'btn-danger', 'btn-sm');
-  changeStidentButtonList.style.maxHeight = '35px'
-  deleteStidentButtonList.style.maxHeight = '35px'
+  changeStidentButtonList.style.maxHeight = '35px';
+  deleteStidentButtonList.style.maxHeight = '35px';
   changeStidentButtonList.textContent = '↔';
   deleteStidentButtonList.textContent = 'X';
   //собтия кнопок
@@ -408,26 +408,26 @@ function getStudentItem(studentObj = studentsList[0]) {
       itemSinglStudents.remove();
       fetch(`http://localhost:3000/api/students/${studentObj.id}`, {
         method: 'DELETE',
-      })
+      });
     }
-  })
+  });
 
   //изменение ------------------------------
 
   changeStidentButtonList.addEventListener('click', function () {
-    idChngeStudent = studentObj.id
-    enterStudentForm.nameInputStudentSurname.value = studentObj.surname
-    enterStudentForm.nameInputStudentName.value = studentObj.name
-    enterStudentForm.nameInputStudentMidlename.value = studentObj.lastname
-    enterStudentForm.nameInputStudentDate.value = studentObj.birthday
-    enterStudentForm.nameInputStudentDateStartStudy.value = studentObj.studyStart
-    enterStudentForm.nameInputStudentFaculty.value = studentObj.faculty
+    idChngeStudent = studentObj.id;
+    enterStudentForm.nameInputStudentSurname.value = studentObj.surname;
+    enterStudentForm.nameInputStudentName.value = studentObj.name;
+    enterStudentForm.nameInputStudentMidlename.value = studentObj.lastname;
+    enterStudentForm.nameInputStudentDate.value = studentObj.birthday;
+    enterStudentForm.nameInputStudentDateStartStudy.value = studentObj.studyStart;
+    enterStudentForm.nameInputStudentFaculty.value = studentObj.faculty;
     enterStudentForm.classList.remove('d-none');
     callEnterFormStudentWrap.classList.add('invisible');
-  })
+  });
 
   //вкалдваем спаны в айтем и затем в лист
-  wrapStidentButtonList.append(changeStidentButtonList, deleteStidentButtonList)
+  wrapStidentButtonList.append(changeStidentButtonList, deleteStidentButtonList);
   itemSinglStudents.append(stringSingleStudentsFIO, stringSingleStudentsFaculty, stringSingleStudentsBithday, stringSingleStudentStady, wrapStidentButtonList);
   listStudents.append(itemSinglStudents);
 }
@@ -547,7 +547,7 @@ async function saveList(arr) {
   if (idChngeStudent == -1) {
 
     for (let obj of arr) {
-      const response = await fetch('http://localhost:3000/api/students', {
+       await fetch('http://localhost:3000/api/students', {
         method: 'POST',
         body: JSON.stringify(obj),
         headers: {
@@ -558,7 +558,7 @@ async function saveList(arr) {
     }
   } else {
 
-    const response = await fetch(`http://localhost:3000/api/students/${idChngeStudent}`, {
+   await fetch(`http://localhost:3000/api/students/${idChngeStudent}`, {
       method: 'PATCH',
       body: JSON.stringify(arr[0]),
       headers: {
@@ -567,8 +567,8 @@ async function saveList(arr) {
     });
     idChngeStudent = -1;
   }
-  const resp = await fetch('http://localhost:3000/api/students');
-  const serverData = await resp.json();
+ // const resp = await fetch('http://localhost:3000/api/students');
+ // const serverData = await resp.json();
 }
 
 
@@ -697,7 +697,7 @@ function filter(arr, prop, value) {
       }
     }
     else {//проверить руботу item.name и lastname вместо item['name'] g
-      if (String(item[prop]).includes(value) == true || String(item['name']).includes(value) == true || String(item['lastname']).includes(value) == true) {
+      if (String(item[prop]).includes(value) == true || String(item.name).includes(value) == true || String(item.lastname).includes(value) == true) {
         result.push(item);
       }
     }
